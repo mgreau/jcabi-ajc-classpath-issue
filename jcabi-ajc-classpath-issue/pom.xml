@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mgreau.jcabi.ajc</groupId>
+    <artifactId>jcabi-ajc-classpath-issue</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>jcabi-ajc-classpath-issue</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.compiler.plugin>3.1</version.compiler.plugin>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <version.jcabi.plugin>0.13.2</version.jcabi.plugin>
+
+      <org.aspectj.version>1.8.6</org.aspectj.version>
+        <junit.version>4.11</junit.version>
+    </properties>
+
+  <modules>
+    <module>commons</module>
+    <module>aspects</module>
+
+  </modules>
+
+    <dependencies>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>${org.aspectj.version}</version>
+      </dependency>
+      <dependency>
+           <groupId>junit</groupId>
+           <artifactId>junit</artifactId>
+           <version>${junit.version}</version>
+           <scope>test</scope>
+       </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.compiler.plugin}</version>
+            </plugin>
+            <plugin>
+          <groupId>com.jcabi</groupId>
+          <artifactId>jcabi-maven-plugin</artifactId>
+          <version>${version.jcabi.plugin}</version>
+          <executions>
+            <execution>
+              <id>weave-classes</id>
+              <phase>process-classes</phase>
+              <goals>
+                <goal>ajc</goal>
+              </goals>
+              <configuration>
+                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+              </configuration>
+            </execution>
+            <execution>
+              <id>weave-test-classes</id>
+              <phase>process-test-classes</phase>
+              <goals>
+                <goal>ajc</goal>
+              </goals>
+              <configuration>
+                <classesDirectory>${project.build.testOutputDirectory}</classesDirectory>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        </plugins>
+    </build>
+
+</project>
