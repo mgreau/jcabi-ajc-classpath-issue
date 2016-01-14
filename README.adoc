@@ -1,4 +1,4 @@
-= Sample project got jcabi AJC Classpath Issue
+= Sample project for jcabi AJC Classpath Issue
 
 The objective of this project is to show the AJC classpath issue with the jcabi-maven-plugin.
 
