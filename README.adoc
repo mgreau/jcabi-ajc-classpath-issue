@@ -1,7 +1,7 @@
 = Sample project for jcabi AJC Classpath Issue
 
-The objective of this project is to show the AJC classpath issue with the jcabi-maven-plugin.
-
+The goal of this project is to show the AJC classpath issue with the jcabi-maven-plugin.
+https://github.com/jcabi/jcabi-maven-plugin/issues/41
 
 == Docker way
 
