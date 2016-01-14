@@ -1,0 +1,75 @@
+= Sample project got jcabi AJC Classpath Issue
+
+The objective of this project is to show the AJC classpath issue with the jcabi-maven-plugin.
+
+
+== Docker way
+
+Just execute *docker-compose up* :)
+
+Both containers will execute Maven commands based on the same source code:
+
+* In one case, when the .m2 repository is empty of reactor modules, test will fail.
+* In the other case, with the artifact commons-1.0-SNAPSHOT.jar available in the .m2 repository, test will succeed.
+
+  $ docker-compose up
+
+.test-ko_1 container will show that the SumTest is KO (aka: method NOT WEAVED)
+[source, text]
+----
+...
+test-ko_1  | Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.382 sec <<< FAILURE!
+test-ko_1  | shouldReturn42(com.mgreau.jcabi.ajc.SumTest)  Time elapsed: 0.029 sec  <<< FAILURE!
+test-ko_1  | java.lang.AssertionError: AJC didn't weave the Sum method! expected:<42> but was:<12>
+...
+test-ko_1  | Results :
+test-ko_1  |
+test-ko_1  | Failed tests:   shouldReturn42(com.mgreau.jcabi.ajc.SumTest): AJC didn't weave the Sum method! expected:<42> but was:<12>
+test-ko_1  |
+test-ko_1  | Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+test-ko_1  |
+test-ko_1  | [INFO] ------------------------------------------------------------------------
+test-ko_1  | [INFO] Reactor Summary:
+test-ko_1  | [INFO]
+test-ko_1  | [INFO] jcabi-ajc-classpath-issue .......................... SUCCESS [  2.468 s]
+test-ko_1  | [INFO] commons ............................................ SUCCESS [  3.471 s]
+test-ko_1  | [INFO] aspects ............................................ FAILURE [  2.625 s]
+test-ko_1  | [INFO] ------------------------------------------------------------------------
+test-ko_1  | [INFO] BUILD FAILURE
+test-ko_1  | [INFO] ------------------------------------------------------------------------
+test-ko_1  | [INFO] Total time: 8.972 s
+test-ko_1  | [INFO] Finished at: 2016-01-14T12:01:48+00:00
+test-ko_1  | [INFO] Final Memory: 19M/123M
+test-ko_1  | [INFO] ------------------------------------------------------------------------
+----
+
+.test-ok_1 container will show that the SumTest is OK (aka: method NOT WEAVED)
+[source, text]
+----
+...
+test-ok_1  | -------------------------------------------------------
+test-ok_1  |  T E S T S
+test-ok_1  | -------------------------------------------------------
+test-ok_1  | Running com.mgreau.jcabi.ajc.SumTest
+test-ok_1  | [ASPECT] Real result: 12Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.182 sec
+test-ok_1  |
+test-ok_1  | Results :
+test-ok_1  |
+test-ok_1  | Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+test-ok_1  |
+test-ok_1  | [INFO] ------------------------------------------------------------------------
+test-ok_1  | [INFO] Reactor Summary:
+test-ok_1  | [INFO]
+test-ok_1  | [INFO] jcabi-ajc-classpath-issue .......................... SUCCESS [  2.159 s]
+test-ok_1  | [INFO] commons ............................................ SUCCESS [  3.886 s]
+test-ok_1  | [INFO] aspects ............................................ SUCCESS [  2.297 s]
+test-ok_1  | [INFO] ------------------------------------------------------------------------
+test-ok_1  | [INFO] BUILD SUCCESS
+test-ok_1  | [INFO] ------------------------------------------------------------------------
+test-ok_1  | [INFO] Total time: 8.472 s
+test-ok_1  | [INFO] Finished at: 2016-01-14T12:02:03+00:00
+test-ok_1  | [INFO] Final Memory: 19M/123M
+test-ok_1  | [INFO] ------------------------------------------------------------------------
+jcabiajcclasspathissue_test-ok_1 exited with code 0
+
+----

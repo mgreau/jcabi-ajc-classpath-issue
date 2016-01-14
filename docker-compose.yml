@@ -1,0 +1,29 @@
+m2_cache:
+  image: busybox
+  volumes:
+   - ./cache/.m2/repository:/root/.m2/repository
+
+source:
+  image: busybox
+  volumes:
+   - ./jcabi-ajc-classpath-issue/:/myproject
+
+test-ok:
+  build: docker/.
+  command: /usr/share/maven/jcabi-ajc-classpath-issue.sh
+  volumes_from:
+   - m2_cache
+   - source
+  working_dir: /myproject
+  environment:
+    MAVEN_OPTS: -Xshare:auto -Xms128M -Xmx256M
+
+test-ko:
+  image: maven:3.3.3-jdk-7
+  command: mvn clean test
+  volumes_from:
+  # No .m2 cache to be sure to fail the test
+   - source
+  working_dir: /myproject
+  environment:
+    MAVEN_OPTS: -Xshare:auto -Xms128M -Xmx256M
