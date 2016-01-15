@@ -27,3 +27,12 @@ test-ko:
   working_dir: /myproject
   environment:
     MAVEN_OPTS: -Xshare:auto -Xms128M -Xmx256M
+
+test-ok-with-fix:
+  build: docker/.
+  command: /usr/share/maven/jcabi-fix42.sh
+  volumes_from:
+   - source
+  working_dir: /myproject
+  environment:
+    MAVEN_OPTS: -Xshare:auto -Xms128M -Xmx256M
